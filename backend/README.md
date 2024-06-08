@@ -32,6 +32,10 @@ Caso o script `install.bat` localizado na pasta raiz do projeto não tenha sido 
     ```bash
     python -m spacy download pt_core_news_sm
     ```
+5. **Instale o PyPDF2 para extração de textos de PDFs:**
+    ```bash
+    pip install PyPDF2
+    ```
 
 ## 🚀 Executando o Backend
 
