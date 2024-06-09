@@ -30,25 +30,28 @@ lines = read_text_file("./training_data/document_cats.txt")
 
 json_data = {"training_cats": json.loads(lines)}
 
-for item in json_data["training_cats"]:
-    text = extract_text_from_pdf("./training_data/documents/" + item["name"] + ".pdf")
-    annotations = item["cats"]
-    cats_dict = {label: score for label, score in annotations.items()}
-    train_data.append((text, {"cats": cats_dict}))  
+try:
+    for item in json_data["training_cats"]:
+        text = extract_text_from_pdf("./training_data/documents/" + item["name"] + ".pdf")
+        annotations = item["cats"]
+        cats_dict = {label: score for label, score in annotations.items()}
+        train_data.append((text, {"cats": cats_dict}))  
 
-optimizer = nlp.begin_training()
-print("Starting training...")
+    optimizer = nlp.begin_training()
+    print("Starting training...")
 
-for i in range(20):
-    random.shuffle(train_data)
-    for text, annotations in train_data:
-        doc = nlp.make_doc(text)
-        example = Example.from_dict(doc, annotations)
-        nlp.update([example], drop=0.5)
-    print("Iteration sucessful: " + str(i))
+    for i in range(20):
+        random.shuffle(train_data)
+        for text, annotations in train_data:
+            doc = nlp.make_doc(text)
+            example = Example.from_dict(doc, annotations)
+            nlp.update([example], drop=0.5)
+        print("Iteration sucessful: " + str(i))
 
-print("Training finished. Saving new model.")
+    print("Training finished. Saving new model.")
 
-nlp.to_disk("model_contracts")
+    nlp.to_disk("model_contracts")
 
-print("New model sucessfully saved.")
+    print("New model sucessfully saved.")
+except Exception as exc:
+    print("Something wrent wrong: " + str(exc))

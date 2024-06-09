@@ -37,9 +37,21 @@ Caso o script `install.bat` localizado na pasta raiz do projeto não tenha sido 
     pip install PyPDF2
     ```
 
+## 🏋️ Treinando o modelo
+
+Para treinar o modelo, siga os seguintes passos:
+
+1. Adicione os documentos PDF que você quer no diretório `./ai/training/training_data/documents`, seguindo os padrões de nomeclatura lá impostos.
+2. Adicione as classificações dos mesmos no arquivo `../documents_cats.txt`
+3. No diretório `../training`, abra o arquivo `training.py` e execute o comando:
+```bash
+python training.py
+```
+4. Aguarde até o treino finalizar.
+
 ## 🚀 Executando o Backend
 
-Para rodar o servidor Flask, use o comando abaixo:
+Para rodar o servidor Flask, você pode usar o arquivo 'run.bat' no diretório principal desse repositório, que roda tanto o servidor backend quanto o frontend, ou use o comando abaixo:
 
 ```bash
 flask --app server run
