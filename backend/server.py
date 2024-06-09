@@ -28,8 +28,16 @@ def show_file_info(text):
         return jsonify({"message": "Success!", "real_values": real_values, "cats": cats}), 200
     except Exception as e:
         return jsonify({"error": "Failed to process the file: " + str(e)}), 500
+    
+@app.route("/post/process-text", methods=["POST"])
+def process_document_text():
+    try:
+        text = request.get_json()
+        return show_file_info(text)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
 
-@app.route("/post", methods=["POST"])
+@app.route("/post/upload-file", methods=["POST"])
 def handle_file_upload():
     try:
         file = request.files.get("file")

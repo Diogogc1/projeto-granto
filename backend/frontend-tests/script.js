@@ -4,7 +4,7 @@ async function uploadDocumentToServer(event) {
         const formData = new FormData();
         formData.append('file', file);
 
-        const response = await fetch("http://localhost:5000/post", {
+        const response = await fetch("http://localhost:5000/post/upload-file", {
             method: "post",
             body: formData
         });
