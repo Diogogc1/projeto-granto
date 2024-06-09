@@ -1,7 +1,4 @@
 /backend/__pycache__
-/backend/training_data
 /backend/utils/__pycache__
 /backend/ai/__pycache__
-/backend/ai/training/training_data/documents
-/backend/ai/training/training_data
 /backend/tests_contracts

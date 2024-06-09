@@ -5,9 +5,9 @@ Este é um projeto backend construído em Python usando o framework Flask. Ele i
 ## 🗂 Estrutura do Projeto
 
 - **server.py**: Arquivo principal que roda o servidor Flask.
-- **ai.py**: Contém a inteligência artificial para análise de documentos, utilizando o SpaCy.
+- **main.py**: Contém a inteligência artificial para análise de documentos, utilizando o SpaCy.
+- **training/**: Pasta que contém o modelo treinado para os contratos, bem como um arquivo txt que contém as classificações de cada documento de exemplo para usar de exemplos para o modelo, e também os documentos de exemplo em si (toda a parte dos documentos de exemplo deve ser adicionada ao .gitignore quando o projeto vier a ficar público para a Granto).
 - **frontend-tests/**: Pasta que contém um frontend simples para testes.
-- **install.bat**: Script para instalação das dependências do frontend e backend.
 
 ## 🔧 Instruções de Instalação
 

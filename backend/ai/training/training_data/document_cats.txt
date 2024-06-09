@@ -1,0 +1,25 @@
+[
+{
+        "name": "0",
+        "cats": {
+            "trabalho": 0.0,
+            "aluguel": 0.0,
+            "prestacao_servico": 1.0,
+            "venda/compra": 0.0,
+            "confidencialidade": 0.0,
+            "parceria": 0.0
+        }
+},
+{
+        "name": "1",
+        "cats": {
+            "trabalho": 0.0,
+            "aluguel": 0.0,
+            "prestacao_servico": 1.0,
+            "venda/compra": 0.0,
+            "confidencialidade": 0.0,
+            "parceria": 0.0
+        }
+}
+]
+
