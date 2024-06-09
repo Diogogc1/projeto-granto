@@ -7,22 +7,22 @@ from utils.pdf import extract_text_from_pdf
 app = Flask(__name__)
 CORS(app)
 
+def create_contracts_dir():
+    if not os.path.exists("./tests_contracts"):
+        os.makedirs("./tests_contracts")
+
 def upload_file(file):
     try:
-        if file:
-            filepath = os.path.join("./tests_contracts", file.filename)
-            if not os.path.exists("./tests_contracts"):
-                os.makedirs("./tests_contracts")
-            file.save(filepath)
-            return show_file_info(filepath)
-        else:
-            raise ValueError("No file selected or another error occurred")
+        filepath = os.path.join("./tests_contracts", file.filename)
+        create_contracts_dir()
+        file.save(filepath)
+        text = extract_text_from_pdf(filepath)
+        return show_file_info(text)
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
-def show_file_info(filepath):
+def show_file_info(text):
     try:
-        text = extract_text_from_pdf(filepath)
         real_values = return_real_values(text)
         cats = return_cats(text)
         return jsonify({"message": "Success!", "real_values": real_values, "cats": cats}), 200
@@ -30,13 +30,10 @@ def show_file_info(filepath):
         return jsonify({"error": "Failed to process the file: " + str(e)}), 500
 
 @app.route("/post", methods=["POST"])
-def upload_file_and_return_info():
+def handle_file_upload():
     try:
         file = request.files.get("file")
-        if file:
-            return upload_file(file)
-        else:
-            raise ValueError("No file selected")
+        return upload_file(file)
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 

@@ -17,7 +17,6 @@ if "textcat_multilabel" not in nlp.pipe_names:
 else:
     textcat = nlp.get_pipe("textcat_multilabel")
 
-textcat.add_label("trabalho")
 textcat.add_label("aluguel")
 textcat.add_label("prestacao_servico")
 textcat.add_label("venda/compra")
