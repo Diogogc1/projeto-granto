@@ -1,15 +1,14 @@
-from spacy.training.example import Example
 import json
 import sys
 import os
+import random
+import spacy
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '../..')))
 
 from utils.txt import read_text_file
 from utils.pdf import extract_text_from_pdf
-
-import random
-import spacy
+from spacy.training.example import Example
 
 nlp = spacy.load("pt_core_news_sm")
 

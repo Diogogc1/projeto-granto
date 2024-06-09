@@ -1,9 +1,9 @@
+import os
+
 from flask import Flask, jsonify, request
 from flask_cors import CORS, cross_origin
 from ai.main import return_real_values, return_cats
 from utils.pdf import extract_text_from_pdf
-
-import os
 
 app = Flask(__name__)
 cors = CORS(app)
@@ -31,6 +31,3 @@ def upload_file_and_return_info():
         return upload_file(file)  
     else:
         return jsonify({"error": "No file selected"}), 400  
-
-if __name__ == "__main__":
-    app.run(debug=True)
