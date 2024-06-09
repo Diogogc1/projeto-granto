@@ -1,10 +1,4 @@
-document.querySelector("button").addEventListener("click", async (event) => {
-    event.preventDefault();
-    await getDocumentValues(event);
-});
-
-async function getDocumentValues(event) {
-    event.preventDefault();
+async function uploadDocumentToServer(event) {
     try {
         const file = document.querySelector("input").files[0];
         const formData = new FormData();
@@ -18,22 +12,12 @@ async function getDocumentValues(event) {
         event.preventDefault();
 
         const result = await response.json();
-
-        if (result) {
-            const message = result[0].message;
-
-            console.log(message);
-
-            const real_values = result[0].real_values;
-
-            real_values.forEach(value => {
-                const text = document.createElement("p");
-                text.innerHTML = value;
-                document.querySelector("body").appendChild(text);
-            }) 
-        }
-
+        console.log(result);
     } catch (error) {
         console.error(error);
     }
 }
+
+document.querySelector(".button-test").addEventListener("click", async (event) => {
+    await uploadDocumentToServer(event);
+});
