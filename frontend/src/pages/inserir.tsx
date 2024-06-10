@@ -1,49 +1,44 @@
 import { ChangeEvent } from "react";
-import { getDocument } from 'pdfjs-dist';
-
+import contratoDAO from "../DAOs/contratoDAO";
 
 export default function Inserir() {
 
-    function submitArquivo(e: ChangeEvent<HTMLInputElement>) {
+    async function submitArquivo(e: ChangeEvent<HTMLInputElement>) {
+        const file = e.target.files![0]
+        const formData = new FormData()
 
-        const file = e.target.files![0]; // Obter o arquivo selecionado
+        formData.append("file", file)
 
-        const reader = new FileReader();
+        //FETCH API
+        try {
+            const response = await fetch('http://localhost:5000/post/upload-file', {
+                method: "POST",
+                body: formData,
+            })
 
-        reader.onload = async (event) => {
-            const arrayBuffer = event.target!.result as ArrayBuffer;
-            const pdf = await getDocument(arrayBuffer).promise;
-            let texto = '';
+            const result = await response.json()
 
-            for (let i = 1; i <= pdf.numPages; i++) {
-                const page = await pdf.getPage(i);
-                const content = await page.getTextContent();
-                content.items.forEach(item => {
-                    texto += item.toString() + ' '; // Concatenar o texto de cada item na página
-                    
-                    console.log(`Passou ${i}`)
-                });
+            console.log(result)
+
+            try {
+                await contratoDAO.adicionarDado({ nome: "João", idade: 25 });
+                console.log("DEU CERTO AAAAAAA!!!!")
+            } catch (e: any) {
+                console.log(e.message)
             }
 
-            reader.readAsArrayBuffer(file);
-            console.log(texto);
 
-            /*//FETCH API
-            fetch('http://localhost:5000/post/process-text', {
-                method: "POST",
-                body: JSON.stringify(textPDF),
-                headers: { "Content-type": "application/json; charset=UTF-8" }
-            })*/
-
+        } catch (e: any) {
+            console.log(e.message)
         }
     }
 
-        return (
-            <>
-                <h2 className="font-bold text-3xl mt-3">Análise de contratos</h2>
-                <p className="mt-2 text-xl">Visualize informações sobre seu contrato, de forma rápida e fácil</p>
+    return (
+        <>
+            <h2 className="font-bold text-3xl mt-3">Análise de contratos</h2>
+            <p className="mt-2 text-xl">Visualize informações sobre seu contrato, de forma rápida e fácil</p>
 
-                <input type="file" accept=".pdf" onChange={submitArquivo} className="bg-[#1262FF] py-5 px-24 mt-8 text-white text-xl rounded" />
-            </>
-        )
-    }
+            <input type="file" accept=".pdf" onChange={submitArquivo} className="bg-[#1262FF] py-5 px-24 mt-8 text-white text-xl rounded" />
+        </>
+    )
+}
