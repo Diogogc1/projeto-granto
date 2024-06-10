@@ -12,14 +12,11 @@ def create_contracts_dir():
         os.makedirs("./tests_contracts")
 
 def upload_file(file):
-    try:
-        filepath = os.path.join("./tests_contracts", file.filename)
-        create_contracts_dir()
-        file.save(filepath)
-        text = extract_text_from_pdf(filepath)
-        return show_file_info(text)
-    except Exception as e:
-        return jsonify({"error": str(e)}), 400
+    create_contracts_dir()
+    filepath = os.path.join("./tests_contracts", file.filename)
+    file.save(filepath)
+    text = extract_text_from_pdf(filepath)
+    return text
 
 def show_file_info(text):
     try:
@@ -41,7 +38,8 @@ def process_document_text():
 def handle_file_upload():
     try:
         file = request.files.get("file")
-        return upload_file(file)
+        text = upload_file(file)
+        return show_file_info(text)
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
