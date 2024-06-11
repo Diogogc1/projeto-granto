@@ -11,7 +11,7 @@ Este é um projeto backend construído em Python usando o framework Flask. Ele i
 
 ## 🔧 Instruções de Instalação
 
-Caso o script `install.bat` localizado na pasta raiz do projeto não tenha sido executado, siga os passos abaixo para instalar as dependências do backend:
+Caso o script `run.bat` localizado na pasta raiz do projeto não tenha sido executado, siga os passos abaixo para instalar as dependências do backend:
 
 1. **Instale o Flask:**
     ```bash

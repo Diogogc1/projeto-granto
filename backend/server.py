@@ -1,7 +1,7 @@
 import os
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from ai.main import return_real_values, return_cats
+from ai.main import return_real_values, return_cats, return_cnpjs
 from utils.pdf import extract_text_from_pdf
 
 app = Flask(__name__)
@@ -20,9 +20,10 @@ def upload_file(file):
 
 def show_file_info(text):
     try:
+        cnpjs = return_cnpjs(text)
         real_values = return_real_values(text)
         cats = return_cats(text)
-        return jsonify({"message": "Success!", "real_values": real_values, "cats": cats}), 200
+        return jsonify({"message": "Success!", "cnpjs": cnpjs, "real_values": real_values, "cats": cats}), 200
     except Exception as e:
         return jsonify({"error": "Failed to process the file: " + str(e)}), 500
     

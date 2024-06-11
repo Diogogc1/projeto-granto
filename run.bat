@@ -1,8 +1,10 @@
 @echo off
 
+echo Testeeee
+
 cd frontend
 
-start cmd /k "npm run dev"
+start cmd /k "npm start"
 
 cd ../backend
 
