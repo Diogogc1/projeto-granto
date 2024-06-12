@@ -1,13 +1,17 @@
 @echo off
 
-echo Testeeee
+cd backend
 
-cd frontend
+echo Instalando dependencias necessárias para o backend...
 
-start cmd /k "npm start"
+pip install flask
+pip install flask_cors
+pip install -U spacy
+python -m spacy download pt_core_news_sm
+pip install PyPDF2
 
-cd ../backend
+start cmd /k "cd ../frontend & echo Instalando dependencias necessárias para o frontend.. & npm install & npm start & echo Iniciando o servidor frontend... & start msedge http://localhost:3000/"
 
-start cmd /k "flask --app server run"
+echo Iniciando o servidor backend...
 
-start msedge http://localhost:3000/
+python -m flask --app server run
