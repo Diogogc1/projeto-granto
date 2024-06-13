@@ -51,10 +51,23 @@ export default function Inserir() {
             </div>
             <h2 className="font-bold text-3xl mt-4">Análise de contratos</h2>
             <p className="mt-2 text-xl">Visualize informações sobre seu contrato, de forma rápida e fácil</p>
-            <label htmlFor="file-upload" className="bg-[#1262FF] font-bold py-4 px-10 mt-8 text-white text-xl rounded-md shadow-md hover:bg-blue-700 transition-colors duration-300 cursor-pointer">
-                Enviar Contrato
+            <div className="flex mt-10">
+                <div className="bg-white py-4 px-3 mt-4 text-gray-800 text-md rounded-md shadow-md hover:bg-[#dcdbe1] transition-colors duration-300 cursor-pointer mr-8" style={{ outline: '1px solid grey' }}>
+                    <p className="mt-2">Analise e obtenha os dados do contrato automaticamente.</p>
+                </div>
+                <div className="bg-white py-4 px-3 mt-4 text-gray-800 text-md rounded-md shadow-md hover:bg-[#dcdbe1] transition-colors duration-300 cursor-pointer mr-8" style={{ outline: '1px solid grey' }}>
+                <p className="text-lg">Seja mais eficiente</p>
+                    <p className="mt-2">Melhore a eficiência de sua empresa na análise de contratos.</p>
+                </div>
+                <div className="bg-white py-4 px-3 mt-4 text-gray-800 text-md rounded-md shadow-md hover:bg-[#dcdbe1] transition-colors duration-300 cursor-pointer" style={{ outline: '1px solid grey' }}>
+                    <p className="mt-2">Tenha facilmente um histórico dos contratos e de suas análises.</p>
+                </div>
+            </div>
+            <label htmlFor="file-upload" className="bg-[#4514a3] font-bold py-4 px-10 mt-10 text-white text-xl rounded-md shadow-md hover:bg-[#3b0f8c] transition-colors duration-300 cursor-pointer">
+                Enviar Arquivo
             </label>
             <input id="file-upload" type="file" accept=".pdf" onChange={submitArquivo} className="hidden" />
+            <p className="mt-4">Só aceitamos PDF, por enquanto.</p>
             {fileName && <p className="mt-4">Arquivo enviado: {fileName}</p>}
         </>
     )
