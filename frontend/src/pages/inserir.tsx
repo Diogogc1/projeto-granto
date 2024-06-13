@@ -45,7 +45,7 @@ export default function Inserir() {
 
     return (
         <>
-            <div className="absolute right-4 my-4 w-max flex flex-col items-center justify-center">
+            <div className="absolute right-4 my-4 w-max flex flex-col items-center justify-center" title="Quando o modo exato está ativado, a IA validará todas as informações. Exemplo: Apenas retornará CNPJs válidos. Quando desligado, a IA usará apenas o contexto do texto para retornar as informações. O melhor modo para se usar depende do quão bem os seus estão formatados.">
                 <CustomSwitch mode={analysisMode} onClick={switchAnalysisMode} />
                 <p className="text-center my-2">Modo exato</p>
             </div>

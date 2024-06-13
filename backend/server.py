@@ -18,10 +18,10 @@ def upload_file(file):
     text = extract_text_from_pdf(filepath)
     return text
 
-def show_file_info(text):
+def show_file_info(text, mode):
     try:
-        cnpjs = return_cnpjs(text)
-        real_values = return_real_values(text)
+        cnpjs = return_cnpjs(text, mode)
+        real_values = return_real_values(text, mode)
         cats = return_cats(text)
         return jsonify({"message": "Success!", "cnpjs": cnpjs, "real_values": real_values, "cats": cats}), 200
     except Exception as e:
@@ -39,8 +39,8 @@ def process_document_text():
 def handle_file_upload():
     try:
         file = request.files.get("file")
+        mode = request.form['mode']
         text = upload_file(file)
-        return show_file_info(text)
+        return show_file_info(text, mode)
     except Exception as e:
         return jsonify({"error": str(e)}), 400
-

@@ -14,4 +14,4 @@ start cmd /k "cd ../frontend & echo Instalando dependencias necessárias para o 
 
 echo Iniciando o servidor backend...
 
-python -m flask --app server run
+python -m flask --app server run --reload
