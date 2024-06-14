@@ -1,6 +1,11 @@
 import { ChangeEvent, useState } from "react";
 import contratoDAO from "../DAOs/contratoDAO";
 import CustomSwitch from "../components/switch";
+import Card from "../components/card";
+import IconRaio from "../images/Lightning.svg"
+import IconGrafico from "../images/ChartLineUp.svg"
+import IconRelogio from "../images/Clock.svg"
+import IconArquivoEnviado from "../images/FileArrowUp.svg"
 
 export default function Inserir() {
     const [fileName, setFileName] = useState("");
@@ -49,26 +54,26 @@ export default function Inserir() {
                 <CustomSwitch mode={analysisMode} onClick={switchAnalysisMode} />
                 <p className="text-center my-2">Modo exato</p>
             </div>
+
             <h2 className="font-bold text-3xl mt-4">Análise de contratos</h2>
             <p className="mt-2 text-xl">Visualize informações sobre seu contrato, de forma rápida e fácil</p>
-            <div className="flex mt-10">
-                <div className="bg-white py-4 px-3 mt-4 text-gray-800 text-md rounded-md shadow-md hover:bg-[#dcdbe1] transition-colors duration-300 cursor-pointer mr-8" style={{ outline: '1px solid grey' }}>
-                    <p className="mt-2">Analise e obtenha os dados do contrato automaticamente.</p>
-                </div>
-                <div className="bg-white py-4 px-3 mt-4 text-gray-800 text-md rounded-md shadow-md hover:bg-[#dcdbe1] transition-colors duration-300 cursor-pointer mr-8" style={{ outline: '1px solid grey' }}>
-                <p className="text-lg">Seja mais eficiente</p>
-                    <p className="mt-2">Melhore a eficiência de sua empresa na análise de contratos.</p>
-                </div>
-                <div className="bg-white py-4 px-3 mt-4 text-gray-800 text-md rounded-md shadow-md hover:bg-[#dcdbe1] transition-colors duration-300 cursor-pointer" style={{ outline: '1px solid grey' }}>
-                    <p className="mt-2">Tenha facilmente um histórico dos contratos e de suas análises.</p>
-                </div>
+            <div className="lg:flex mt-10 gap-10">
+                <Card titulo="Utilize IA" texto="Analise e obtenha os dados do contrato automaticamente" iconeURL={IconRaio} altIcone="Icone de um relógio"></Card>
+
+                <Card titulo="Seja mais eficiente" texto="Melhore a eficiência de sua empresa na análise de contratos" iconeURL={IconGrafico} altIcone="Icone de um gráfico de linha subindo"></Card>
+                
+                <Card titulo="Tenha histórico" texto="Tenha facilmente um histórico dos contratos e de suas análises" iconeURL={IconRelogio} altIcone="Icone de um raio"></Card>
             </div>
-            <label htmlFor="file-upload" className="bg-[#4514a3] font-bold py-4 px-10 mt-10 text-white text-xl rounded-md shadow-md hover:bg-[#3b0f8c] transition-colors duration-300 cursor-pointer">
-                Enviar Arquivo
-            </label>
-            <input id="file-upload" type="file" accept=".pdf" onChange={submitArquivo} className="hidden" />
-            <p className="mt-4">Só aceitamos PDF, por enquanto.</p>
-            {fileName && <p className="mt-4">Arquivo enviado: {fileName}</p>}
+            <div className="absolute bottom-0 mb-4 flex flex-col items-center">
+                <button className="bg-[#4514a3] flex items-center justify-center gap-4 font-bold py-4 px-20 mt-10 text-white text-xl rounded-md shadow-md hover:bg-[#3b0f8c] transition-colors duration-300 cursor-pointer" onClick={() => document.getElementById('file-upload')!.click()}>
+                    <img src={IconArquivoEnviado} alt="Icone de um arquivo sendo enviado" width={50}/>
+                    <p className="text-2xl text-medium text-white">Enviar Arquivo</p>
+                    <input id="file-upload" type="file" accept=".pdf" onChange={submitArquivo} className="hidden" />
+                </button>
+                
+                <p className="mt-4">Só aceitamos PDF, por enquanto.</p>
+                {fileName && <p className="mt-4">Arquivo enviado: {fileName}</p>}
+            </div>
         </>
     )
 }
