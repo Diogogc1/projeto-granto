@@ -57,14 +57,12 @@ export default function Inserir() {
 
             <h2 className="font-bold text-3xl mt-4">Análise de contratos</h2>
             <p className="mt-2 text-xl">Visualize informações sobre seu contrato, de forma rápida e fácil</p>
-            <div className="lg:flex mt-10 gap-10">
-                <Card titulo="Utilize IA" texto="Analise e obtenha os dados do contrato automaticamente" iconeURL={IconRaio} altIcone="Icone de um relógio"></Card>
-
-                <Card titulo="Seja mais eficiente" texto="Melhore a eficiência de sua empresa na análise de contratos" iconeURL={IconGrafico} altIcone="Icone de um gráfico de linha subindo"></Card>
-                
-                <Card titulo="Tenha histórico" texto="Tenha facilmente um histórico dos contratos e de suas análises" iconeURL={IconRelogio} altIcone="Icone de um raio"></Card>
+            <div className="lg:flex flex-row mt-10 gap-10 justify-center">
+                <Card titulo="Automação" texto="Obtenha dados contratuais utilizando Inteligência Artificial, reduzindo o tempo necessário para a análise inicial dos documentos." iconeURL={IconRaio} altIcone="Icone de um relógio"></Card>
+                <Card titulo="Eficiência operacional" texto="Aumente a eficiência da sua empresa na análise de contratos, minimizando erros humanos e otimizando o processo de revisão." iconeURL={IconGrafico} altIcone="Icone de um gráfico de linha subindo"></Card>
+                <Card titulo="Histórico Completo" texto="Acesse facilmente um histórico detalhado de contratos e suas análises para melhor acompanhamento e referência." iconeURL={IconRelogio} altIcone="Icone de um raio"></Card>
             </div>
-            <div className="absolute bottom-0 mb-4 flex flex-col items-center">
+            <div className="absolute bottom-20 mb-4 flex flex-col items-center">
                 <button className="bg-[#4514a3] flex items-center justify-center gap-4 font-bold py-4 px-20 mt-10 text-white text-xl rounded-md shadow-md hover:bg-[#3b0f8c] transition-colors duration-300 cursor-pointer" onClick={() => document.getElementById('file-upload')!.click()}>
                     <img src={IconArquivoEnviado} alt="Icone de um arquivo sendo enviado" width={50}/>
                     <p className="text-2xl text-medium text-white">Enviar Arquivo</p>
