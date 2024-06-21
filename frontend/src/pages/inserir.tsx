@@ -64,11 +64,11 @@ export default function Inserir() {
             </div>
             <div className="absolute bottom-20 mb-4 flex flex-col items-center">
                 <button className="bg-[#4514a3] flex items-center justify-center gap-4 font-bold py-4 px-20 mt-10 text-white text-xl rounded-md shadow-md hover:bg-[#3b0f8c] transition-colors duration-300 cursor-pointer" onClick={() => document.getElementById('file-upload')!.click()}>
-                    <img src={IconArquivoEnviado} alt="Icone de um arquivo sendo enviado" width={50}/>
+                    <img src={IconArquivoEnviado} alt="Icone de um arquivo sendo enviado" width={50} />
                     <p className="text-2xl text-medium text-white">Enviar Arquivo</p>
                     <input id="file-upload" type="file" accept=".pdf" onChange={submitArquivo} className="hidden" />
                 </button>
-                
+
                 <p className="mt-4">Só aceitamos PDF, por enquanto.</p>
                 {fileName && <p className="mt-4">Arquivo enviado: {fileName}</p>}
             </div>

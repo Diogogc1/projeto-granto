@@ -14,11 +14,11 @@ export default function Busca() {
 
     return (
         <>
-            <h1>Busca</h1>
+            <h1 className="font-bold text-3xl mt-4">Contratos Enviados</h1>
             {contratos.map((contrato, index) => {
                 return (
-                    <div>
-                        <p>{contrato.nome}</p>
+                    <div className="flex flex-col items-center border border-gray-300 bg-white py-4 px-3 mt-4 text-gray-800 text-md rounded-md shadow-md hover:bg-[#dcdbe1] transition-colors duration-300 cursor-pointer" key={index}>
+                        <p className="text-lg">{contrato.nome}</p>
                     </div>
                 )
             })}
