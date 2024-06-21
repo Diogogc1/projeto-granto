@@ -5,6 +5,25 @@ import os
 def validate_info(info, regex):
     return re.match(regex, info) is not None
 
+def return_orgs(text):
+    nlp = spacy.load("pt_core_news_sm")
+    doc = nlp(text)
+    orgs = []
+    for token in doc:
+        if token.ent_type_ == "ORG":
+            orgs.append(token.text)
+    orgs = list(set(orgs))
+    return orgs
+
+def return_validity(text):
+    nlp = spacy.load("pt_core_news_sm")
+    doc = nlp(text)
+    context_dates = [ent.text for ent in doc.ents if ent.label_ == "DATE"]
+    date_pattern = re.compile(r'\b\d{2}/\d{2}/\d{4}\b')
+    regex_dates = date_pattern.findall(text)
+    all_dates = context_dates + regex_dates
+    return all_dates
+
 def return_cnpjs(text, mode):
     nlp = spacy.load("pt_core_news_sm")
     doc = nlp(text)

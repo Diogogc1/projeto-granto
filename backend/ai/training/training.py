@@ -39,7 +39,7 @@ try:
     optimizer = nlp.begin_training()
     print("Starting training...")
 
-    for i in range(20):
+    for i in range(50):
         random.shuffle(train_data)
         for text, annotations in train_data:
             doc = nlp.make_doc(text)
