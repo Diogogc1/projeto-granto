@@ -19,7 +19,7 @@ else:
 
 textcat.add_label("aluguel")
 textcat.add_label("prestacao_servico")
-textcat.add_label("venda/compra")
+textcat.add_label("venda_compra")
 textcat.add_label("confidencialidade")
 textcat.add_label("parceria")
 
