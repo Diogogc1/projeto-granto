@@ -66,7 +66,7 @@ export default function Inserir() {
                 <Card titulo="Eficiência operacional" texto="Aumente a eficiência da sua empresa na análise de contratos, minimizando erros humanos e otimizando o processo de revisão." iconeURL={IconGrafico} altIcone="Icone de um gráfico de linha subindo"></Card>
                 <Card titulo="Histórico Completo" texto="Acesse facilmente um histórico detalhado de contratos e suas análises para melhor acompanhamento e referência." iconeURL={IconRelogio} altIcone="Icone de um raio"></Card>
             </div>
-            <div className="absolute bottom-4 mb-4 flex flex-col items-center">
+            <div className="fixed bottom-4 flex flex-col items-center">
                 <button className="bg-[#4514a3] flex items-center justify-center gap-4 font-bold py-4 px-20 text-white text-xl rounded-md shadow-md hover:bg-[#3b0f8c] transition-colors duration-300 cursor-pointer" onClick={() => document.getElementById('file-upload')!.click()}>
                     <img src={IconArquivoEnviado} alt="Icone de um arquivo sendo enviado" width={50} />
                     <p className="text-2xl text-medium text-white">Enviar Arquivo</p>
@@ -75,8 +75,8 @@ export default function Inserir() {
 
                 
                 {!fileName 
-                    ? <p className="mt-4">Só aceitamos PDF, por enquanto.</p>
-                    : <p className="mt-4">Arquivo enviado: {fileName}</p>
+                    ? <p className="mt-2">Só aceitamos PDF, por enquanto.</p>
+                    : <p className="mt-2">Arquivo enviado: {fileName}</p>
                 }
             </div>
         </>

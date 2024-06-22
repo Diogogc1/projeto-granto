@@ -18,7 +18,7 @@ export default function Busca() {
             {contratos.map((contrato, index) => {
                 return (
                     <div className="flex flex-col items-center border border-gray-300 bg-white py-4 px-3 mt-4 text-gray-800 text-md rounded-md shadow-md hover:bg-[#dcdbe1] transition-colors duration-300 cursor-pointer" key={index}>
-                        <p className="text-lg">{contrato.nome}</p>
+                        <p className="text-lg">{contrato.contrato.cats.aluguel}</p>
                     </div>
                 )
             })}
