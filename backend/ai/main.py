@@ -1,6 +1,9 @@
 import re
 import spacy
 import os
+from datetime import timedelta
+from dateutil.parser import parse
+from dateutil.relativedelta import relativedelta
 
 # Iniciando as variáveis do NLP e do DOC (texto processado pela IA)
 nlp = None
@@ -39,13 +42,87 @@ def return_orgs():
     orgs = list(set(orgs))
     return orgs
 
-# Função para retornar a vigência do contrato, pega tanto entidades que se encaixam como "DATE" pro modelo da Spacy PT-BR, quanto datas no estilo 'XX/XX/XXXX' via REGEX
-def return_validity(text):
+def extract_dates(text):
+    doc = nlp(text)
+    
+    # Capturar datas com SpaCy
     context_dates = [ent.text for ent in doc.ents if ent.label_ == "DATE"]
+    
+    # Regex para datas no formato dd/mm/yyyy
     date_pattern = re.compile(r'\b\d{2}/\d{2}/\d{4}\b')
     regex_dates = date_pattern.findall(text)
-    all_dates = context_dates + regex_dates
-    return all_dates
+    
+    # Regex para datas no formato '21 de junho de 2024'
+    extended_date_pattern = re.compile(r'\b\d{1,2} de \w+ de \d{4}\b')
+    extended_regex_dates = extended_date_pattern.findall(text)
+    
+    return context_dates + regex_dates + extended_regex_dates
+
+def calculate_relative_dates(text):
+    # Regex para durações relativas
+    relative_patterns = [
+        r'(\d+)\s*\(\w+\)\s+(meses|dias|anos)\s+contados\s+a\s+partir\s+de\s+(\d{2}/\d{2}/\d{4})',
+        r'(\d+)\s+(meses|dias|anos)\s+de\s+duração\s+a\s+partir\s+de\s+(\d{2}/\d{2}/\d{4})',
+        r'validade\s+de\s+(\d+)\s+(meses|dias|anos)\s+iniciando-se\s+em\s+(\d{2}/\d{2}/\d{4})',
+        r'execução\s+do\s+contrato\s+por\s+(\d+)\s+(meses|dias|anos),?\s+começando\s+em\s+(\d{2}/\d{2}/\d{4})',
+        r'válido\s+por\s+(\d+)\s+(meses|dias|anos)\s+a\s+partir\s+de\s+(\d{2}/\d{2}/\d{4})'
+    ]
+    
+    # Testando os regex
+    for pattern in relative_patterns:
+        relative_pattern = re.compile(pattern)
+        relative_matches = relative_pattern.findall(text)
+        
+        if relative_matches:
+            for match in relative_matches:
+                value, unit, start_date_str = match
+                value = int(value)
+                
+                try:
+                    start_date = parse(start_date_str, dayfirst=False) 
+                except ValueError:
+                    continue
+                
+                if unit == 'meses':
+                    final_date = start_date + relativedelta(months=value)
+                elif unit == 'dias':
+                    final_date = start_date + timedelta(days=value)
+                elif unit == 'anos':
+                    final_date = start_date + relativedelta(years=value)
+                else:
+                    continue
+                
+                return final_date.strftime('%d/%m/%Y')
+    
+    return None
+
+def return_validity(text):
+    # Calcular data relativa se houver
+    relative_date = calculate_relative_dates(text)
+    
+    if relative_date:
+        return relative_date
+    
+    # Extrair todas as datas
+    all_dates = extract_dates(text)
+    
+    if not all_dates:
+        return "Nenhuma data encontrada"
+    
+    # Tentar parsear as datas
+    parsed_dates = []
+    for date_str in all_dates:
+        try:
+            parsed_date = parse(date_str, fuzzy=True, dayfirst=True)
+            parsed_dates.append(parsed_date)
+        except (ValueError, TypeError):
+            continue
+    
+    if not parsed_dates:
+        return "Nenhuma data válida encontrada"
+    
+    # Se não houver data relativa, retornar a primeira data encontrada
+    return parsed_dates[0].strftime('%d/%m/%Y')
 
 # Função para retornar os CNPJs do texto. Se o modo 'preciso/exato' estiver ativado, será utilizado REGEX para verificar se o CNPJ está nos padrões
 def return_cnpjs(mode):

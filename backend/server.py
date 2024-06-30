@@ -24,10 +24,10 @@ def upload_file(file):
     filepath = os.path.join("./tests_contracts", file.filename)
     file.save(filepath)
     text = extract_text_from_pdf(filepath)
-    return text
+    return [text, filepath]
 
 # Função que invoca primeiramente o processamento do texto pelo modelo PT-BR da IA. Após isso, as funções no arquivo './ai/main.py' são invocadas para retornar as informações do texto como um objeto JSON
-def show_file_info(text, mode):
+def show_file_info(text, mode, filepath):
     try:
         load_doc(text)
         cnpjs = return_cnpjs(mode)
@@ -38,6 +38,11 @@ def show_file_info(text, mode):
         return jsonify({"message": "Success!", "cnpjs": cnpjs, "real_values": real_values, "cats": cats, "dates": dates, "orgs": orgs}), 200
     except Exception as e:
         return jsonify({"error": "Failed to process the file: " + str(e)}), 500
+    finally: 
+        try:
+            os.remove(filepath)
+        except Exception as e:
+            print("Error while trying to remove the file: " + str(e))
     
 # Rota para processamento de texto, recebe um JSON com o texto e o modo da análise (exato / não exato). Invoca a função para mostrar as informações logo em seguida
 @app.route("/post/process-text", methods=["POST"])
@@ -56,8 +61,10 @@ def handle_file_upload():
     try:
         file = request.files.get("file")
         mode = request.form['mode']
-        text = upload_file(file)
-        return show_file_info(text, mode)
+        text_and_filepath = upload_file(file)
+        text = text_and_filepath[0]
+        filepath = text_and_filepath[1]
+        return show_file_info(text, mode, filepath)
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
