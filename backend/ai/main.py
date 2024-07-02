@@ -146,7 +146,7 @@ def return_cnpjs(mode):
                 valid_cnpj = True
                 if mode == "exact":
                     valid_cnpj = validate_info(desired_token.text, r"([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})")
-                if valid_cnpj:
+                if valid_cnpj and len(desired_token.text) > 10:
                     cnpjs.append(desired_token.text)
     return cnpjs
 
@@ -155,7 +155,11 @@ def return_real_values(mode):
     real_values = []
     for token in doc:
         if token.text == "R$":
-            desired_token = doc[token.i + 1]
+            count = 1
+            desired_token = doc[token.i + count]
+            while (desired_token.is_space or desired_token.is_punct) and count < 100:
+                count += 1
+                desired_token = doc[token.i + count]
             valid_real_value = True
             if mode == "exact":
                 valid_real_value = validate_info(desired_token.text, r"^(([1-9]\d{0,2}(\.\d{3})*)|(([1-9]\.\d*)?\d))(\,\d\d)?$")
