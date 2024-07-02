@@ -141,13 +141,13 @@ def return_cnpjs(mode):
                 count += 1
             if count < 100:
                 desired_token = doc[token.i + count + 1]
-                if desired_token.text == "\n":
+                if desired_token.is_space or desired_token.is_punct:
                     desired_token = doc[token.i + count + 2]
                 valid_cnpj = True
                 if mode == "exact":
                     valid_cnpj = validate_info(desired_token.text, r"([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})")
                 if valid_cnpj:
-                    cnpjs.append(token.text + " " + desired_token.text)
+                    cnpjs.append(desired_token.text)
     return cnpjs
 
 # Função para retornar valores reais no texto. Se o modo 'preciso/exato' estiver ativado, será utilizado REGEX para verificar se o valor real está nos padrões 
