@@ -1,22 +1,23 @@
 import os
 from flask import Flask, jsonify, request
 from flask_cors import CORS
-from dotenv import load_dotenv
-from ai.main import load_model, load_doc, return_real_values, return_cats, return_cnpjs, return_validity, return_orgs
+from ai.main import load_model, load_doc, return_real_values, return_cats, return_cnpjs, return_validity, return_contractant, return_contractor
 from utils.pdf import extract_text_from_pdf
 
-# Carregando o modelo ao iniciar o server, bem como carregando o arquivo .env
+# Carregando o modelo ao iniciar o server
 load_model()
-load_dotenv()
 
 # Registrando o app Flask, bem como configurando o CORS para todos os métodos e origens
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*", "methods": ["GET", "POST", "HEAD", "OPTIONS"]}})
 
-# Criando a pasta onde os contratos enviados serão salvos temporariamente, se não existir ainda no servidor do backend
+# Função que a pasta onde os contratos enviados serão salvos temporariamente, se não existir ainda no servidor do backend
 def create_contracts_dir():
     if not os.path.exists("./tests_contracts"):
         os.makedirs("./tests_contracts")
+
+#Criando o diretório dos contratos
+create_contracts_dir()
 
 # Função responsável pelo upload dos arquivos. Após a verificação e possivel criação do diretório, o arquivo é salvo, e tem seu texto extraido, que também é o retorno da função
 def upload_file(file):
@@ -34,8 +35,9 @@ def show_file_info(text, mode, filepath):
         real_values = return_real_values(mode)
         cats = return_cats(text)
         dates = return_validity(text)
-        orgs = return_orgs()
-        return jsonify({"message": "Success!", "cnpjs": cnpjs, "real_values": real_values, "cats": cats, "dates": dates, "orgs": orgs}), 200
+        contractant = return_contractant()
+        contractor = return_contractor()
+        return jsonify({"message": "Success!", "cnpjs": cnpjs, "real_values": real_values, "cats": cats, "dates": dates, "contractant": contractant, "contractor": contractor}), 200
     except Exception as e:
         return jsonify({"error": "Failed to process the file: " + str(e)}), 500
     finally: 

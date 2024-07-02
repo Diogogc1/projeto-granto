@@ -33,14 +33,21 @@ def load_doc(text):
 def validate_info(info, regex):
     return re.match(regex, info) is not None
 
-# Função para retornar as empresas do texto, atualmente utiliza o próprio modelo PT-BR da Spacy para pegar as entidades do tipo "ORG" (empresa) no texto
-def return_orgs():
+# Função para retornar a contratante do contrato, atualmente utiliza o próprio modelo PT-BR da Spacy para pegar as entidades do tipo "ORG" (empresa) no texto
+def return_contractant():
     orgs = []
     for token in doc:
         if token.ent_type_ == "ORG":
             orgs.append(token.text)
-    orgs = list(set(orgs))
-    return orgs
+    return orgs[0]
+
+# Função para retornar o contratado do contrato,
+def return_contractor():
+    orgs = []
+    for token in doc:
+        if token.ent_type_ == "ORG":
+            orgs.append(token.text)
+    return orgs[1]
 
 def extract_dates(text):
     doc = nlp(text)
