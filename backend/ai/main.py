@@ -39,7 +39,10 @@ def return_contractant():
     for token in doc:
         if token.ent_type_ == "ORG":
             orgs.append(token.text)
-    return orgs[0]
+    if (len(orgs) > 0):
+        return orgs[0]
+    else:
+        return "Nenhum contratante encontrado"
 
 # Função para retornar o contratado do contrato,
 def return_contractor():
@@ -47,7 +50,10 @@ def return_contractor():
     for token in doc:
         if token.ent_type_ == "ORG":
             orgs.append(token.text)
-    return orgs[1]
+    if (len(orgs) > 0):
+        return orgs[1]
+    else:
+        return "Nenhum contratado encontrado"
 
 def extract_dates(text):
     doc = nlp(text)
