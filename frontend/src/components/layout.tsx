@@ -1,5 +1,6 @@
 import { useState } from "react"
 import { Link } from "react-router-dom"
+import logoGranto from "../images/logoGranto.webp"
 
 export default function Layout({ children }: { children: React.ReactNode }) {
     const [mudouPagina, setMudouPagina] = useState(false)
@@ -10,20 +11,20 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
     return (
         <>
-        <header className="w-full h-16 bg-[#4514a3] flex items-center shadow-lg mx-auto">
-             <img src="https://grantoseguros.com/wp-content/webp-express/webp-images/uploads/2022/08/logo2-1024x484.png.webp" alt="Granto Seguros Logo" className="h-10 w-auto ml-3"/>
+            <header className="w-full h-16 bg-[#4510a3] flex items-center shadow-lg mx-auto">
+                <img src={logoGranto} alt="Granto Seguros Logo" className="h-10 w-auto ml-3" />
                 {mudouPagina
                     ? <button className="ml-auto mr-4" onClick={trocarBotao}>
-                        <Link to={'/'} className="bg-[#77edd9] text-white font-bold p-2 px-6 rounded shadow-md hover:bg-[#44bda9] transition-colors duration-300">Enviar Contrato</Link>
+                        <Link to={'/'} className="bg-[#0CD2AB] text-white font-bold p-2 px-6 rounded-lg shadow-md hover:bg-[#44bda9] transition-colors duration-300">Enviar Contrato</Link>
                     </button>
 
                     : <button className="ml-auto mr-4" onClick={trocarBotao}>
-                        <Link to={'/busca'} className="bg-[#77edd9] text-white font-bold p-2 px-6 rounded shadow-md hover:bg-[#44bda9] transition-colors duration-300">Ver Contratos</Link>
+                        <Link to={'/busca'} className="bg-[#0CD2AB] text-white font-bold p-2 px-6 rounded-lg shadow-md hover:bg-[#44bda9] transition-colors duration-300">Ver Contratos</Link>
                     </button>
                 }
             </header>
 
-            <main className="flex items-center flex-col xl:px-64 lg:px-28 md:px-20">
+            <main className="flex items-center flex-col 2xl:px-36 xl:px-48 lg:px-28 md:px-20 px-6">
                 {children}
             </main>
         </>

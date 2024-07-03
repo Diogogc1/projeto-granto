@@ -1,16 +1,19 @@
 interface PropsCard {
     titulo: string,
     texto: string,
-    iconeURL: string,
+    icone: React.ElementType,
     altIcone: string
 }
 
-export default function Card({ titulo, texto, iconeURL, altIcone }: PropsCard) {
+export default function Card({ titulo, texto, icone: IconComponent, altIcone }: PropsCard) {
     return (
-        <div className="flex flex-col items-center bg-white py-4 px-3 mt-4 text-gray-800 text-md rounded-md shadow-md hover:bg-[#dcdbe1] transition-colors duration-300 cursor-pointer" style={{ outline: '1px solid grey' }}>
-            <img src={iconeURL} alt={altIcone} width={80}/>
-            <p className="text-2xl font-medium mt-4">{titulo}</p>
-            <p className="mt-2 text-center opacity-80">{texto}</p>
+        <div className="group flex xl:flex-col flex-1 items-center bg-[#F9F9F9] py-6 sm:px-4 mt-4 text-gray-800 text-md rounded-xl hover:bg-[#4514a3] hover:text-white transition-colors duration-300 cursor-pointer">
+            <IconComponent aria-label={altIcone} size={80} className="hidden sm:block text-[#4510a3] transition-colors duration-300 group-hover:text-white" />
+            <div className="flex flex-col items-center">
+                <p className="sm:text-2xl text-xl font-medium sm:mt-4 ">{titulo}</p>
+                <p className="mt-2 text-center sm:w-96 mx-6 xl:mx-0 xl:w-auto">{texto}</p>
+            </div>
+
         </div>
     )
 }

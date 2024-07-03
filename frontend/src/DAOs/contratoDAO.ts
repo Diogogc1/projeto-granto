@@ -13,7 +13,6 @@ class ContratoDAO {
                 const db = (event.target as IDBOpenDBRequest).result;
                 if (!db.objectStoreNames.contains("meusDados")) {
                     const objectStore = db.createObjectStore("meusDados", { autoIncrement: true });
-                    objectStore.createIndex("nome", "nome", { unique: false });
                 }
             };
 
