@@ -50,7 +50,7 @@ def return_contractor():
     for token in doc:
         if token.ent_type_ == "ORG":
             orgs.append(token.text)
-    if (len(orgs) > 0):
+    if (len(orgs) > 1):
         return orgs[1]
     else:
         return "Nenhum contratado encontrado"
