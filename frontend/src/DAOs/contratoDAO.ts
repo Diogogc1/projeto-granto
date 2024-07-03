@@ -2,7 +2,7 @@ class ContratoDAO {
     private db: IDBDatabase | null = null;
 
     constructor(private dbName: string, private dbVersion: number) {
-        this.openDatabase()
+        this.openDatabase();
     }
 
     public openDatabase(): Promise<void> {
@@ -153,6 +153,40 @@ class ContratoDAO {
             };
         });
     }
+
+    public buscarPorNomeArquivo(nomeArquivo: string): Promise<any[]> {
+        return new Promise((resolve, reject) => {
+            if (!this.db) {
+                console.error("Banco de dados não está aberto.");
+                reject("Banco de dados não está aberto.");
+                return;
+            }
+
+            const transaction = this.db.transaction(["meusDados"], "readonly");
+            const objectStore = transaction.objectStore("meusDados");
+            const request = objectStore.openCursor();
+            const resultados: any[] = [];
+
+            request.onsuccess = (event) => {
+                const cursor = (event.target as IDBRequest).result;
+                if (cursor) {
+                    if (cursor.value.nomeArquivo.includes(nomeArquivo)) {
+                        resultados.push(cursor.value);
+                    }
+                    cursor.continue();
+                } else {
+                    console.log("Busca concluída. Resultados encontrados:", resultados);
+                    resolve(resultados);
+                }
+            };
+
+            request.onerror = (event) => {
+                console.log("Erro ao buscar dado:", (event.target as IDBRequest).error);
+                reject((event.target as IDBRequest).error);
+            };
+        });
+    }
+
 }
 
 

@@ -26,9 +26,9 @@ export default function Inserir() {
                 body: formData,
             });
 
-            const result = await response.json();
+            const contrato = await response.json();
 
-            console.log(result);
+            console.log(contrato);
 
             try {
                 // Ler o arquivo como ArrayBuffer
@@ -39,16 +39,16 @@ export default function Inserir() {
                     const arrayBuffer = event.target!.result;
 
                     // Adicionar o arquivo ao objeto a ser armazenado
-                    const dadoParaArmazenar = {
+                    const result = {
                         nomeArquivo: file.name,
-                        contrato: result,
+                        contrato: contrato,
                         arquivo: arrayBuffer,
                     };
 
-                    await contratoDAO.adicionarDado(dadoParaArmazenar);
+                    await contratoDAO.adicionarDado(result);
                     console.log("Dado armazenado com sucesso!");
 
-                    navigate('/resultado', { state: { dadoParaArmazenar } });
+                    navigate('/resultado', { state: { result } });
                 };
 
                 fileReader.onerror = (error) => {

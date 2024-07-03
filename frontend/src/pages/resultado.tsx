@@ -63,11 +63,11 @@ export default function Resultado() {
             </div>
 
             <div className="flex gap-6 w-full">
-                <div className="bg-slate-50 hover:bg-[#4510a3] hover:text-white flex flex-col border-2 border-gray-300 p-3 py-5 rounded-md flex-1 gap-4 mt-8">
+                <div className="bg-[#F9F9F9]  hover:bg-[#4510a3] hover:text-white flex flex-col border-2 border-gray-300 p-3 py-5 rounded-md flex-1 gap-4 mt-8">
                     <p className="text-xl">{`Nome do Arquivo: ${result.nomeArquivo}`}</p>
                     <p className="text-xl">{`CNPJs: ${result.contrato.cnpjs.join(', ')}`}</p>
                 </div>
-                <div className="bg-slate-50 hover:bg-[#4510a3] hover:text-white flex flex-col border-2 border-gray-300 p-3 py-5 rounded-md flex-1 gap-4 mt-8">
+                <div className="bg-[#F9F9F9]  hover:bg-[#4510a3] hover:text-white flex flex-col border-2 border-gray-300 p-3 py-5 rounded-md flex-1 gap-4 mt-8">
                     <p className="text-xl">{`Contratante: ${result.contrato.contractant}`}</p>
                     <p className="text-xl">{`Contratado: ${result.contrato.contractor}`}</p>
                 </div>

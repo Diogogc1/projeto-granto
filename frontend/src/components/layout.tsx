@@ -11,15 +11,15 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
     return (
         <>
-            <header className="w-full h-16 bg-[#4510a3] flex items-center shadow-lg mx-auto">
+            <header className="w-full h-16 bg-[#4510a3] flex items-center mx-auto">
                 <img src={logoGranto} alt="Granto Seguros Logo" className="h-10 w-auto ml-3" />
                 {mudouPagina
                     ? <button className="ml-auto mr-4" onClick={trocarBotao}>
-                        <Link to={'/'} className="bg-[#0CD2AB] text-white font-bold p-2 px-6 rounded-lg shadow-md hover:bg-[#44bda9] transition-colors duration-300">Enviar Contrato</Link>
+                        <Link to={'/'} className="bg-[#0CD2AB] text-white font-semibold p-2 px-6 rounded-[10px] shadow-md hover:bg-[#44bda9] transition-colors duration-300">Enviar Contrato</Link>
                     </button>
 
                     : <button className="ml-auto mr-4" onClick={trocarBotao}>
-                        <Link to={'/busca'} className="bg-[#0CD2AB] text-white font-bold p-2 px-6 rounded-lg shadow-md hover:bg-[#44bda9] transition-colors duration-300">Ver Contratos</Link>
+                        <Link to={'/busca'} className="bg-[#0CD2AB] text-white font-semibold p-2 px-6 rounded-[10px] shadow-md hover:bg-[#44bda9] transition-colors duration-300">Ver Contratos</Link>
                     </button>
                 }
             </header>
