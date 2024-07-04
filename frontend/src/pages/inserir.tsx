@@ -77,7 +77,7 @@ export default function Inserir() {
 
             <h1 className="font-bold text-3xl 2xl:text-4xl md:mt-4 mt-16">Análise de contratos</h1>
             <p className="mt-2 2xl:text-2xl sm:text-xl text-center text-lg">Visualize informações sobre seu contrato, de forma rápida e fácil</p>
-            <div className="xl:flex flex-row xl:mt-6 mt-4 gap-10 justify-center">
+            <div className="xl:flex flex-row 2xl:mt-16 2xl:text-xl 2xl:h-80 xl:mt-6 mt-4 gap-10 justify-center">
                 <Card titulo="Automação" texto="Obtenha dados contratuais utilizando Inteligência Artificial, reduzindo o tempo necessário para a análise inicial dos documentos." icone={Lightning} altIcone="Icone de um relógio"></Card>
                 <Card titulo="Eficiência operacional" texto="Aumente a eficiência da sua empresa na análise de contratos, minimizando erros humanos e otimizando o processo de revisão." icone={ChartLineUp} altIcone="Icone de um gráfico de linha subindo"></Card>
                 <Card titulo="Histórico Completo" texto="Acesse facilmente um histórico detalhado de contratos e suas análises para melhor acompanhamento e referência." icone={ClockCounterClockwise} altIcone="Icone de um raio"></Card>

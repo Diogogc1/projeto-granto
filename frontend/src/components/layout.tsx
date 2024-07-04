@@ -24,7 +24,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                 }
             </header>
 
-            <main className="flex items-center flex-col 2xl:px-36 xl:px-48 lg:px-28 md:px-20 px-6">
+            <main className="flex items-center flex-col 2xl:px-800 xl:px-48 lg:px-28 md:px-20 px-6">
                 {children}
             </main>
         </>
