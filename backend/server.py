@@ -34,10 +34,10 @@ def show_file_info(text, mode, filepath):
         cnpjs = return_cnpjs(mode)
         real_values = return_real_values(mode)
         cats = return_cats(text)
-        dates = return_validity(text)
+        date = return_validity(text)
         contractant = return_contractant()
         contractor = return_contractor()
-        return jsonify({"message": "Success!", "cnpjs": cnpjs, "real_values": real_values, "cats": cats, "dates": dates, "contractant": contractant, "contractor": contractor}), 200
+        return jsonify({"message": "Success!", "cnpjs": cnpjs, "real_values": real_values, "cats": cats, "date": date, "contractant": contractant, "contractor": contractor}), 200
     except Exception as e:
         return jsonify({"error": "Failed to process the file: " + str(e)}), 500
     finally: 

@@ -72,7 +72,7 @@ export default function Resultado() {
                     <p className="text-xl">{`Contratado: ${result.contrato.contractor}`}</p>
                 </div>
             </div>
-            <p className="text-xl mt-8">{`Datas: ${result.contrato.dates}`}</p>
+            <p className="text-xl mt-8">{`Data de vigência do contrato: ${result.contrato.date}`}</p>
 
             
             {/*<iframe

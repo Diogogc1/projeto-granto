@@ -150,11 +150,25 @@ def return_cnpjs(mode):
                 if desired_token.is_space or desired_token.is_punct:
                     desired_token = doc[token.i + count + 2]
                 valid_cnpj = True
+                possible_verification_numbers = doc[desired_token.i + 1].text
                 if mode == "exact":
-                    valid_cnpj = validate_info(desired_token.text, r"([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})")
+                    valid_cnpj = validate_info(desired_token.text + possible_verification_numbers, r"([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})")
                 if valid_cnpj and len(desired_token.text) > 10:
-                    cnpjs.append(desired_token.text)
+                    if validate_info(possible_verification_numbers, r"-\w{2}$"):
+                        if desired_token.text + possible_verification_numbers not in cnpjs:
+                            cnpjs.append(desired_token.text + possible_verification_numbers)
+                    else:
+                        if desired_token.text not in cnpjs:
+                            cnpjs.append(desired_token.text)
     return cnpjs
+
+# Checar se é número
+def isnumber(value):
+    try:
+         float(value)
+    except ValueError:
+         return False
+    return True
 
 # Função para retornar valores reais no texto. Se o modo 'preciso/exato' estiver ativado, será utilizado REGEX para verificar se o valor real está nos padrões 
 def return_real_values(mode):
@@ -169,7 +183,7 @@ def return_real_values(mode):
             valid_real_value = True
             if mode == "exact":
                 valid_real_value = validate_info(desired_token.text, r"^(([1-9]\d{0,2}(\.\d{3})*)|(([1-9]\.\d*)?\d))(\,\d\d)?$")
-            if valid_real_value:
+            if valid_real_value and (isnumber(desired_token.text) or desired_token.text.startswith("X")):
                 real_values.append(token.text + " " + desired_token.text)
     return real_values
 
