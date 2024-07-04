@@ -1,13 +1,15 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import contratoDAO from "../DAOs/contratoDAO";
 import CustomSwitch from "../components/switch";
 import Card from "../components/card";
 import { useNavigate } from "react-router-dom";
 import { ChartLineUp, ClockCounterClockwise, FileArrowUp, Lightning } from "@phosphor-icons/react";
+import ErrorMessageBox from "../components/error";
 
 export default function Inserir() {
     const [fileName, setFileName] = useState("");
     const [analysisMode, setAnalysisMode] = useState("default");
+    const [errorMessage, setErrorMessage] = useState('');
 
     const navigate = useNavigate();
 
@@ -26,9 +28,11 @@ export default function Inserir() {
                 body: formData,
             });
 
-            const contrato = await response.json();
+            if (!response.ok) {
+                throw new Error('Erro ao enviar arquivo. Status: ' + response.status);
+            }
 
-            console.log(contrato);
+            const contrato = await response.json();
 
             try {
                 // Ler o arquivo como ArrayBuffer
@@ -36,37 +40,50 @@ export default function Inserir() {
                 fileReader.readAsArrayBuffer(file);
 
                 fileReader.onload = async (event) => {
-                    const arrayBuffer = event.target!.result;
+                    try {
+                        const arrayBuffer = event.target!.result;
 
-                    // Adicionar o arquivo ao objeto a ser armazenado
-                    const result = {
-                        nomeArquivo: file.name,
-                        contrato: contrato,
-                        arquivo: arrayBuffer,
-                    };
+                        // Adicionar o arquivo ao objeto a ser armazenado
+                        const result = {
+                            nomeArquivo: file.name,
+                            contrato: contrato,
+                            arquivo: arrayBuffer,
+                        };
 
-                    await contratoDAO.adicionarDado(result);
-                    console.log("Dado armazenado com sucesso!");
-
-                    navigate('/resultado', { state: { result } });
+                        await contratoDAO.adicionarDado(result);
+                        console.log("Dado armazenado com sucesso!");
+                        navigate('/resultado', { state: { result } });
+                    } catch (e: any) {
+                        console.log("Erro ao processar arquivo ou armazenar dados:", e.message);
+                        setErrorMessage('Ocorreu um erro ao processar o arquivo ou armazenar os dados: ' + e.message);
+                    }
                 };
 
                 fileReader.onerror = (error) => {
                     console.log("Erro ao ler o arquivo:", error);
+                    setErrorMessage('Ocorreu um erro ao ler o arquivo: ' + error);
                 };
             } catch (e: any) {
-                console.log(e.message);
+                console.log("Erro ao ler o arquivo:", e.message);
+                setErrorMessage('Ocorreu um erro ao ler o arquivo: ' + e.message);
             }
-
         } catch (e: any) {
-            console.log(e.message);
+            console.log("Erro ao processar a sua solicitação:", e.message);
+            setErrorMessage('Ocorreu um erro ao processar a sua solicitação: ' + e.message);
         }
     }
 
-
     function switchAnalysisMode() {
-        setAnalysisMode(prev => prev == "default" ? "exact" : "default")
+        setAnalysisMode(prev => prev === "default" ? "exact" : "default");
     }
+
+    useEffect(() => {
+        if (errorMessage !== "") {
+            setTimeout(() => {
+                setErrorMessage("");
+            }, 10000)
+        }
+    }, [errorMessage]);
 
     return (
         <>
@@ -95,6 +112,11 @@ export default function Inserir() {
                     : <p className="mt-2">Arquivo enviado: {fileName}</p>
                 }
             </div>
+            {errorMessage !== "" ?
+                <div onClick={() => setErrorMessage("")}>
+                    <ErrorMessageBox message={errorMessage} />
+                </div>
+                : <></>}
         </>
     )
 }
