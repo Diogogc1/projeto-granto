@@ -33,7 +33,10 @@ export default function Inserir() {
             });
 
             if (!response.ok) {
-                throw new Error('Erro ao enviar arquivo. Status: ' + response.status);
+                const errorText = response.status === 400 ? ' erro no envio do arquivo pelo usuário. Tente novamente.' :
+                                 response.status === 500 ? ' erro no servidor. Tente novamente mais tarde.' :
+                                 ' erro ao enviar arquivo. Status: ' + response.status;
+                throw new Error(errorText);
             }
 
             const contrato = await response.json();
@@ -58,22 +61,22 @@ export default function Inserir() {
                         console.log("Dado armazenado com sucesso!");
                         navigate('/resultado', { state: { result } });
                     } catch (e: any) {
-                        console.log("Erro ao processar arquivo ou armazenar dados:", e.message);
-                        setErrorMessage('Ocorreu um erro ao processar o arquivo ou armazenar os dados: ' + e.message);
+                        console.error("Erro ao processar arquivo ou armazenar dados:", e.message);
+                        setErrorMessage('Ocorreu um erro ao processar o arquivo ou armazenar os dados:' + e.message);
                     }
                 };
 
                 fileReader.onerror = (error) => {
-                    console.log("Erro ao ler o arquivo:", error);
-                    setErrorMessage('Ocorreu um erro ao ler o arquivo: ' + error);
+                    console.error("Erro ao ler o arquivo:", error);
+                    setErrorMessage('Ocorreu um erro ao ler o arquivo:');
                 };
             } catch (e: any) {
-                console.log("Erro ao ler o arquivo:", e.message);
-                setErrorMessage('Ocorreu um erro ao ler o arquivo: ' + e.message);
+                console.error("Erro ao ler o arquivo:", e.message);
+                setErrorMessage('Ocorreu um erro ao ler o arquivo:' + e.message);
             }
         } catch (e: any) {
-            console.log("Erro ao processar a sua solicitação:", e.message);
-            setErrorMessage('Ocorreu um erro ao processar a sua solicitação: ' + e.message);
+            console.error("Erro ao processar a sua solicitação:", e.message);
+            setErrorMessage('Ocorreu um erro ao processar a sua solicitação:' + e.message);
         }
         setLoading(false);
     }
@@ -89,6 +92,7 @@ export default function Inserir() {
                     setErrorMessage("");
                 }
             }, 10000)
+            setFileName("");
         }
     }, [errorMessage]);
 

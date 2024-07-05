@@ -95,7 +95,7 @@ class ContratoDAO {
             const request = objectStore.getAll();
 
             request.onsuccess = (event) => {
-                console.log("Dados lidos com sucesso:", (event.target as IDBRequest).result);
+                //console.log("Dados lidos com sucesso:", (event.target as IDBRequest).result);
                 resolve((event.target as IDBRequest).result);
             };
 

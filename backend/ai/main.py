@@ -17,17 +17,20 @@ custom_model_path = os.path.abspath("./ai/training/model_contracts")
 def load_model():
     global nlp
     nlp = spacy.load("pt_core_news_sm")
+    print("Spacy portuguese model loaded")
     
 # Carregando o nosso modelo customizado que é treinado para classificar o texto. Ele pode ser encontrado no diretório /training
 def load_custom_model():
     global custom_nlp
     custom_nlp = spacy.load(custom_model_path)
+    print("Custom AI model loaded.")
 
 # Processando o texto para ser transformado em documento. Ele é feito sempre que um novo arquivo é enviado para a IA processar. É feito apenas uma vez para evitar múltiplos processamentos do mesmo texto, que
 # embora seja funcional, diminui o desempenho e o tempo necessário para o usuário aguardar. É melhor já processar apenas uma vez e usá-lo em todas as funções necessárias
 def load_doc(text):
     global doc
     doc = nlp(text)
+    print("Text processed by the AI")
 
 # Função para validar regex, recebe a informação e verifica se o regex se encaixa nela
 def validate_info(info, regex):
@@ -40,7 +43,6 @@ def extract_entity_after_keywords(keywords):
             entity_tokens = []
             while (token.i + count < len(doc)) and (count < 20):
                 next_token = doc[token.i + count]
-                print(next_token.text)
                 if next_token.text in [":", "\n", "-", " "]:
                     count += 1
                     continue
@@ -59,14 +61,18 @@ def return_contractant():
     keywords = ["CONTRATANTE", "COMPRADOR", "LOCADOR", "PARCEIRA", "PARCEIRO", "DIVULGANTE", "DIVULGADORA"]
     contractant = extract_entity_after_keywords(keywords)
     if contractant:
+        print("Contractant processed. Contractant: " + contractant)
         return contractant
+    print("Contractant processed. No contractant found.")
     return "Nenhum contratante encontrado"
 
 def return_contractor():
     keywords = ["CONTRATADA", "VENDEDOR", "LOCATÁRIO", "PARCEIRA", "PARCEIRO", "RECEPTOR", "RECEPTORA"]
     contractor = extract_entity_after_keywords(keywords)
     if contractor:
+        print("Contractor processed. Contractor: " + contractor)
         return contractor
+    print("Contractor processed. No contractor found.")
     return "Nenhum contratado encontrado"
 
 def extract_dates(text):
@@ -105,7 +111,8 @@ def calculate_relative_dates(text):
         r'\d{2}-\d{2}-\d{4}',  
         r'[a-z]+\s+\d{1,2},\s+\d{4}',  
         r'\d{1,2}\s+[a-z]{3}\.\s+\d{4}',  
-        r'[A-Z][a-zéúíóáãõ]+\s+[A-Z][a-zéúíóáãõ]+\s*,\s+\d{1,2}\s+de\s+[a-zéúíóáãõ]+\s+de\s+\d{4}'  
+        r'[A-Z][a-zéúíóáãõ]+\s+[A-Z][a-zéúíóáãõ]+\s*,\s+\d{1,2}\s+de\s+[a-zéúíóáãõ]+\s+de\s+\d{4}',
+        r'[A-ZÉÚÍÓÁÃÕÇ\s-]+,\s+\d{1,2}\s+de\s+[A-ZÉÚÍÓÁÃÕÇ][a-zéúíóáãõç]+\s+de\s+\d{4}'
     ]
     
     for pattern in relative_patterns:
@@ -166,12 +173,14 @@ def return_validity(text):
     relative_date = calculate_relative_dates(text)
     
     if relative_date:
+        print("Dates processed. Date:" + relative_date)
         return relative_date
     
     # Extrair todas as datas
     all_dates = extract_dates(text)
     
     if not all_dates:
+        print("Dates processed. No dates found.")
         return "Nenhuma data encontrada"
     
     # Tentar parsear as datas
@@ -184,9 +193,11 @@ def return_validity(text):
             continue
     
     if not parsed_dates:
+        print("Dates processed. No dates found.")
         return "Nenhuma data válida encontrada"
     
     # Se não houver data relativa, retornar a primeira data encontrada
+    print("Dates processed. Date: " + parsed_dates[0].strftime('%d/%m/%Y'))
     return parsed_dates[0].strftime('%d/%m/%Y')
 
 # Função para retornar os CNPJs do texto. Se o modo 'preciso/exato' estiver ativado, será utilizado REGEX para verificar se o CNPJ está nos padrões
@@ -213,6 +224,7 @@ def return_cnpjs(mode):
                     else:
                         if desired_token.text not in cnpjs:
                             cnpjs.append(desired_token.text)
+    print("CNPJs processed:", cnpjs)
     return cnpjs
 
 
@@ -240,6 +252,7 @@ def return_real_values(mode):
                 if valid_real_value and (is_number(desired_token.text) or desired_token.text.startswith("X")):
                     if token.text + " " + desired_token.text not in real_values:
                         real_values.append(token.text + " " + desired_token.text)
+    print("Real values processed: " , real_values)                    
     return real_values
 
 
@@ -248,4 +261,5 @@ def return_cats(text):
     model_path = os.path.abspath("./ai/training/model_contracts")
     cats_nlp = spacy.load(model_path)
     cats_doc = cats_nlp(text)
+    print("Cats processed: ", cats_doc.cats)    
     return cats_doc.cats

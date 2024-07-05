@@ -14,7 +14,7 @@ export default function Resultado() {
     const [pdfUrl, setPdfUrl] = useState('');
 
     useEffect(() => {
-        console.log(`NOME: ${result.nomeArquivo}`)
+        //console.log(`NOME: ${result.nomeArquivo}`)
 
         /*if (result && result.arquivo) {
             const blob = new Blob([result.arquivo], { type: 'application/pdf' });
