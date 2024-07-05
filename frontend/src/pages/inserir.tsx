@@ -5,15 +5,19 @@ import Card from "../components/card";
 import { useNavigate } from "react-router-dom";
 import { ChartLineUp, ClockCounterClockwise, FileArrowUp, Lightning } from "@phosphor-icons/react";
 import ErrorMessageBox from "../components/error";
+import Loading from "../components/loading";
 
 export default function Inserir() {
     const [fileName, setFileName] = useState("");
     const [analysisMode, setAnalysisMode] = useState("default");
     const [errorMessage, setErrorMessage] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
 
     async function submitArquivo(e: ChangeEvent<HTMLInputElement>) {
+        setLoading(true);
+
         const file = e.target.files![0];
         const formData = new FormData();
 
@@ -71,6 +75,7 @@ export default function Inserir() {
             console.log("Erro ao processar a sua solicitação:", e.message);
             setErrorMessage('Ocorreu um erro ao processar a sua solicitação: ' + e.message);
         }
+        setLoading(false);
     }
 
     function switchAnalysisMode() {
@@ -80,7 +85,9 @@ export default function Inserir() {
     useEffect(() => {
         if (errorMessage !== "") {
             setTimeout(() => {
-                setErrorMessage("");
+                if(errorMessage !== ""){
+                    setErrorMessage("");
+                }
             }, 10000)
         }
     }, [errorMessage]);
@@ -117,6 +124,7 @@ export default function Inserir() {
                     <ErrorMessageBox message={errorMessage} />
                 </div>
                 : <></>}
+            {loading ? <Loading/> : <></>}
         </>
     )
 }

@@ -37,21 +37,23 @@ def extract_entity_after_keywords(keywords):
     for token in doc:
         if token.text.upper() in keywords:
             count = 1
-            entity_text = ""
+            entity_tokens = []
             while (token.i + count < len(doc)) and (count < 20):
                 next_token = doc[token.i + count]
-                if next_token.text in [":", "\n", "-"]:
+                print(next_token.text)
+                if next_token.text in [":", "\n", "-", " "]:
                     count += 1
                     continue
-                if next_token.ent_type_ in ["ORG", "PER", "COMPANY"]:
-                    entity_text = next_token.text
+                if next_token.ent_type_ in ["ORG", "PER", "COMPANY"] or next_token.pos_ in ["PROPN", "NOUN", "ADP", "DET", "CCONJ", "PUNCT", "ADJ"]:
+                    entity_tokens.append(next_token.text)
                     count += 1
-                    while (token.i + count < len(doc)) and (doc[token.i + count].ent_type_ in ["ORG", "PER", "COMPANY"]):
-                        entity_text += " " + doc[token.i + count].text
+                    while (token.i + count < len(doc)) and (doc[token.i + count].ent_type_ in ["ORG", "PER", "COMPANY"] or doc[token.i + count].pos_ in ["PROPN", "NOUN", "ADP", "DET", "CCNJ", "PUNCT", "ADJ"]):
+                        entity_tokens.append(doc[token.i + count].text)
                         count += 1
-                    return entity_text
+                    return " ".join(entity_tokens).strip()
                 count += 1
     return None
+
 
 def return_contractant():
     keywords = ["CONTRATANTE", "COMPRADOR", "LOCADOR", "PARCEIRA", "PARCEIRO", "DIVULGANTE", "DIVULGADORA"]
