@@ -132,12 +132,12 @@ export default function Busca() {
             </div>
 
             {totalPages > 1 && (
-                <div className="flex justify-between items-center fixed bottom-0 left-0 w-full bg-white py-4 px-[350px] border-t border-gray-300">
-                    <button onClick={prevPage} disabled={currentPage === 1} className="py-2 px-4 bg-[#4510a3] text-white rounded-[10px]">
+                <div className="flex justify-between items-center fixed bottom-0 left-0 w-full bg-white py-4 sm:px-28 lg:px-96 px-4 border-t border-gray-300">
+                    <button onClick={prevPage} disabled={currentPage === 1} className="py-2 px-4 bg-[#4510a3] text-white md:text-lg text-sm rounded-[10px]">
                         Anterior
                     </button>
-                    <span className="text-lg">Página {currentPage} de {totalPages}</span>
-                    <button onClick={nextPage} disabled={currentPage === totalPages} className="py-2 px-4 bg-[#4510a3] text-white rounded-[10px]">
+                    <span className="text-md">Página {currentPage} de {totalPages}</span>
+                    <button onClick={nextPage} disabled={currentPage === totalPages} className="py-2 px-4 bg-[#4510a3] text-white md:text-lg text-sm rounded-[10px]">
                         Próxima
                     </button>
                 </div>
