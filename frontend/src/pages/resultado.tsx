@@ -87,7 +87,7 @@ export default function Resultado() {
             <div className="flex lg:gap-6 w-full lg:flex-row flex-col justify-center lg:items-stretch items-center">
                 <div className="bg-[#F9F9F9] hover:bg-[#efeef4] flex flex-1 flex-col border-2 border-gray-300 p-3 py-5 rounded-md xl:w-1/3 lg:w-3/4 w-full gap-4 sm:mt-8 mt-4">
                     <p className="sm:text-xl text-sm">{`Nome do Arquivo: ${result.nomeArquivo}`}</p>
-                    <p className="sm:text-xl text-sm">{`CNPJs/CPFs: ${result.contrato.cnpjs.length > 0 ? result.contrato.cnpjs.join(', ') : 'Nenhum CNPJ encontrado'}`}</p>
+                    <p className="sm:text-xl text-sm">{`CNPJs/CPFs: ${result.contrato.cnpjs.length > 0 ? result.contrato.cnpjs.join(', ') : 'Nenhum CNPJ ou CPF encontrado'}`}</p>
                 </div>
                 <div className="bg-[#F9F9F9] hover:bg-[#efeef4] flex flex-1 flex-col border-2 border-gray-300 p-3 py-5 rounded-md xl:w-1/3 lg:w-3/4 w-full  gap-4 sm:mt-8 mt-4">
                     <p className="sm:text-xl text-sm">{`${contractantLabel}: ${result.contrato.contractant}`}</p>
