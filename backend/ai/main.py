@@ -204,7 +204,7 @@ def return_validity(text):
 def return_cnpjs(mode):
     cnpjs = []
     for token in doc:
-        if token.text == "CNPJ":
+        if token.text == "CNPJ" or token.text == "CPF":
             count = 1
             while (token.i + count < len(doc)) and (doc[token.i + count].text not in [":", "n", "nº", "n.", "n.º", "nº."]):
                 count += 1
