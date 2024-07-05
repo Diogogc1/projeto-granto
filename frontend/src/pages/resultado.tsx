@@ -84,21 +84,21 @@ export default function Resultado() {
                 <p className="sm:text-xl text-md text-[#4510a3] font-semibold">{classificacao}</p>
             </div>
 
-            <div className="flex gap-6 w-full justify-center">
-                <div className="bg-[#F9F9F9] hover:bg-[#efeef4] flex flex-col border-2 border-gray-300 p-3 py-5 rounded-md w-1/3 gap-4 mt-8">
-                    <p className="text-xl">{`Nome do Arquivo: ${result.nomeArquivo}`}</p>
-                    <p className="text-xl">{`CNPJs: ${result.contrato.cnpjs.length > 0 ? result.contrato.cnpjs.join(', ') : 'Nenhum CNPJ encontrado'}`}</p>
+            <div className="flex lg:gap-6 w-full lg:flex-row flex-col justify-center lg:items-stretch items-center">
+                <div className="bg-[#F9F9F9] hover:bg-[#efeef4] flex flex-1 flex-col border-2 border-gray-300 p-3 py-5 rounded-md xl:w-1/3 lg:w-3/4 w-full gap-4 mt-8">
+                    <p className="sm:text-xl">{`Nome do Arquivo: ${result.nomeArquivo}`}</p>
+                    <p className="sm:text-xl">{`CNPJs: ${result.contrato.cnpjs.length > 0 ? result.contrato.cnpjs.join(', ') : 'Nenhum CNPJ encontrado'}`}</p>
                 </div>
-                <div className="bg-[#F9F9F9] hover:bg-[#efeef4] flex flex-col border-2 border-gray-300 p-3 py-5 rounded-md w-1/3 gap-4 mt-8">
-                    <p className="text-xl">{`${contractantLabel}: ${result.contrato.contractant}`}</p>
-                    <p className="text-xl">{`${contractorLabel}: ${result.contrato.contractor}`}</p>
+                <div className="bg-[#F9F9F9] hover:bg-[#efeef4] flex flex-1 flex-col border-2 border-gray-300 p-3 py-5 rounded-md xl:w-1/3 lg:w-3/4 w-full  gap-4 mt-8">
+                    <p className="sm:text-xl">{`${contractantLabel}: ${result.contrato.contractant}`}</p>
+                    <p className="sm:text-xl">{`${contractorLabel}: ${result.contrato.contractor}`}</p>
                 </div>
-                <div className="bg-[#F9F9F9] hover:bg-[#efeef4] flex flex-col border-2 border-gray-300 p-3 py-5 rounded-md w-1/3 gap-4 mt-8">
-                    <p className="text-xl" style={{ flexDirection: 'column' }}>{`Valores monetários: ${result.contrato.real_values.length > 0 ? result.contrato.real_values.join(', ') : 'Nenhum valor monetário encontrado'}`}</p>
+                <div className="bg-[#F9F9F9] hover:bg-[#efeef4] flex flex-1 flex-col border-2 border-gray-300 p-3 py-5 rounded-md xl:w-1/3 lg:w-3/4 w-full  gap-4 mt-8">
+                    <p className="sm:text-xl" style={{ flexDirection: 'column' }}>{`Valores monetários: ${result.contrato.real_values.length > 0 ? result.contrato.real_values.join(', ') : 'Nenhum valor monetário encontrado'}`}</p>
                 </div>
             </div>
 
-            <p className="text-xl mt-8">{`Data de vigência do contrato: ${result.contrato.date}`}</p>
+            <p className="sm:text-xl mt-8">{`Data de vigência do contrato: ${result.contrato.date}`}</p>
 
             {/*<iframe
                 src={pdfUrl}

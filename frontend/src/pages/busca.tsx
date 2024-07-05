@@ -57,11 +57,11 @@ export default function Busca() {
 
     return (
         <div className="w-full min-h-screen flex flex-col justify-between">
-            <div className="px-40">
+            <div className="xl:px-40">
                 <div className="flex justify-center items-center gap-2 mt-4 mb-6">
                     <input
                         type="text"
-                        className="bg-[#F9F9F9] h-12 w-full rounded-md px-3"
+                        className="bg-[#F9F9F9] h-12 w-full rounded-md px-3 sm:text-md text-xs"
                         onChange={handleBusca}
                         value={busca}
                         placeholder="Busque um nome de arquivo"
@@ -115,15 +115,15 @@ export default function Busca() {
                     return (
                         <div
                             onClick={() => verResultado(contrato)}
-                            className="flex flex-row w-full gap-6 items-center border border-gray-300 bg-[#F9F9F9] py-3 px-3 mt-4 text-gray-800 text-md rounded-md shadow-sm hover:bg-[#efeef4] transition-colors duration-300 cursor-pointer"
+                            className="flex flex-row w-full sm:gap-6 gap-3 items-center border border-gray-300 bg-[#F9F9F9] py-3 sm:px-3 px-2 mt-4 text-gray-800 text-md rounded-md shadow-sm hover:bg-[#efeef4] transition-colors duration-300 cursor-pointer"
                             key={index}
                         >
                             <FilePdf size={80} className="text-red-600"></FilePdf>
                             <div>
-                                <p className="text-lg font-semibold mb-1">{`${contrato.nomeArquivo}`}</p>
+                                <p className="text-md sm:text-xl font-semibold sm:mb-1 mb-3">{`${contrato.nomeArquivo}`}</p>
                                 <div className="flex gap-1">
-                                    <p className="text-base">{`Classificação: `}</p>
-                                    <p className="text-[#4510a3] font-semibold">{classificacao}</p>
+                                    <p className="text-xs sm:text-xl">{`Classificação: `}</p>
+                                    <p className="text-[#4510a3] text-xs sm:text-xl font-semibold">{classificacao}</p>
                                 </div>
                             </div>
                         </div>
