@@ -61,7 +61,7 @@ export default function Busca() {
                 <div className="flex justify-center items-center gap-2 mt-4 mb-6">
                     <input
                         type="text"
-                        className="bg-[#F9F9F9] h-12 w-full rounded-md px-3 sm:text-md text-xs"
+                        className="bg-[#F9F9F9] h-12 w-full rounded-md px-3 sm:text-lg text-xs"
                         onChange={handleBusca}
                         value={busca}
                         placeholder="Busque um nome de arquivo"
