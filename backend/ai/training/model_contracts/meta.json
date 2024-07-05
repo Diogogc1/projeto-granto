@@ -622,7 +622,7 @@
     "textcat_multilabel":[
       "aluguel",
       "prestacao_servico",
-      "venda/compra",
+      "venda_compra",
       "confidencialidade",
       "parceria"
     ]

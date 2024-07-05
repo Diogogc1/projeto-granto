@@ -33,27 +33,39 @@ def load_doc(text):
 def validate_info(info, regex):
     return re.match(regex, info) is not None
 
-# Função para retornar a contratante do contrato, atualmente utiliza o próprio modelo PT-BR da Spacy para pegar as entidades do tipo "ORG" (empresa) no texto
-def return_contractant():
-    orgs = []
+def extract_entity_after_keywords(keywords):
     for token in doc:
-        if token.ent_type_ == "ORG":
-            orgs.append(token.text)
-    if (len(orgs) > 0):
-        return orgs[0]
-    else:
-        return "Nenhum contratante encontrado"
+        if token.text.upper() in keywords:
+            count = 1
+            entity_text = ""
+            while (count < 20) and (token.i + count < len(doc)): 
+                next_token = doc[token.i + count]
+                if next_token.text in [":", "\n", "-"]:
+                    count += 1
+                    continue
+                if next_token.ent_type_ in ["ORG", "PER", "COMPANY"]:
+                    entity_text = next_token.text
+                    count += 1
+                    while (token.i + count < len(doc)) and (doc[token.i + count].ent_type_ in ["ORG", "PER", "COMPANY"]):
+                        entity_text += " " + doc[token.i + count].text
+                        count += 1
+                    return entity_text
+                count += 1
+    return None
 
-# Função para retornar o contratado do contrato,
+def return_contractant():
+    keywords = ["CONTRATANTE", "COMPRADOR", "LOCADOR", "PARCEIRA", "PARCEIRO", "DIVULGANTE", "DIVULGADORA"]
+    contractant = extract_entity_after_keywords(keywords)
+    if contractant:
+        return contractant
+    return "Nenhum contratante encontrado"
+
 def return_contractor():
-    orgs = []
-    for token in doc:
-        if token.ent_type_ == "ORG":
-            orgs.append(token.text)
-    if (len(orgs) > 1):
-        return orgs[1]
-    else:
-        return "Nenhum contratado encontrado"
+    keywords = ["CONTRATADA", "VENDEDOR", "LOCATÁRIO", "PARCEIRA", "PARCEIRO", "RECEPTOR", "RECEPTORA"]
+    contractor = extract_entity_after_keywords(keywords)
+    if contractor:
+        return contractor
+    return "Nenhum contratado encontrado"
 
 def extract_dates(text):
     doc = nlp(text)
@@ -71,6 +83,14 @@ def extract_dates(text):
     
     return context_dates + regex_dates + extended_regex_dates
 
+def convert_month_name_to_number(month_name):
+    months = {
+        'janeiro': 1, 'fevereiro': 2, 'março': 3, 'abril': 4,
+        'maio': 5, 'junho': 6, 'julho': 7, 'agosto': 8,
+        'setembro': 9, 'outubro': 10, 'novembro': 11, 'dezembro': 12
+    }
+    return months.get(month_name.lower(), None)
+
 def calculate_relative_dates(text):
     # Regex para durações relativas
     relative_patterns = [
@@ -78,21 +98,25 @@ def calculate_relative_dates(text):
         r'(\d+)\s+(meses|dias|anos)\s+de\s+duração\s+a\s+partir\s+de\s+(\d{2}/\d{2}/\d{4})',
         r'validade\s+de\s+(\d+)\s+(meses|dias|anos)\s+iniciando-se\s+em\s+(\d{2}/\d{2}/\d{4})',
         r'execução\s+do\s+contrato\s+por\s+(\d+)\s+(meses|dias|anos),?\s+começando\s+em\s+(\d{2}/\d{2}/\d{4})',
-        r'válido\s+por\s+(\d+)\s+(meses|dias|anos)\s+a\s+partir\s+de\s+(\d{2}/\d{2}/\d{4})'
+        r'válido\s+por\s+(\d+)\s+(meses|dias|anos)\s+a\s+partir\s+de\s+(\d{2}/\d{2}/\d{4})',
+        r'\d{2}/\d{2}/\d{4}',  # Data no formato dd/mm/yyyy
+        r'\d{2}-\d{2}-\d{4}',  # Data no formato dd-mm-yyyy
+        r'[a-z]+\s+\d{1,2},\s+\d{4}',  # Data no formato inglês: 'July 21, 2024'
+        r'\d{1,2}\s+[a-z]{3}\.\s+\d{4}',  # Data no formato abreviado: '21 jun. 2024'
+        r'[A-Z][a-zéúíóáãõ]+\s+[A-Z][a-zéúíóáãõ]+\s*,\s+\d{1,2}\s+de\s+[a-zéúíóáãõ]+\s+de\s+\d{4}'  # Data no formato 'São Paulo, 21 de junho de 2024'
     ]
     
-    # Testando os regex
     for pattern in relative_patterns:
         relative_pattern = re.compile(pattern)
         relative_matches = relative_pattern.findall(text)
         
-        if relative_matches:
-            for match in relative_matches:
+        for match in relative_matches:
+            if isinstance(match, tuple) and len(match) == 3:
                 value, unit, start_date_str = match
                 value = int(value)
                 
                 try:
-                    start_date = parse(start_date_str, dayfirst=False) 
+                    start_date = parse(start_date_str, dayfirst=True)
                 except ValueError:
                     continue
                 
@@ -106,6 +130,32 @@ def calculate_relative_dates(text):
                     continue
                 
                 return final_date.strftime('%d/%m/%Y')
+            
+            elif isinstance(match, str):
+                specific_date = match
+                
+                if re.match(r'[A-Z][a-zéúíóáãõ]+\s+[A-Z][a-zéúíóáãõ]+\s*,\s+\d{1,2}\s+de\s+[a-zéúíóáãõ]+\s+de\s+\d{4}', specific_date):
+                    try:
+                        parts = specific_date.split(',', 1)[1].strip().split()
+                        day = int(parts[0])
+                        month_name = parts[2]
+                        year = int(parts[4])
+                        
+                        month = convert_month_name_to_number(month_name)
+                        if month is None:
+                            continue
+                        
+                        final_date = parse(f"{day}/{month}/{year}")
+                        return final_date.strftime('%d/%m/%Y')
+                    
+                    except (IndexError, ValueError):
+                        continue
+                else:
+                    try:
+                        final_date = parse(specific_date, dayfirst=True)
+                        return final_date.strftime('%d/%m/%Y')
+                    except ValueError:
+                        continue
     
     return None
 
@@ -160,15 +210,15 @@ def return_cnpjs(mode):
                     else:
                         if desired_token.text not in cnpjs:
                             cnpjs.append(desired_token.text)
-    return cnpjs
+    return cnpjs 
 
 # Checar se é número
-def isnumber(value):
+def is_number(text):
     try:
-         float(value)
+        float(text.replace('.', '').replace(',', '.'))
+        return True
     except ValueError:
-         return False
-    return True
+        return False
 
 # Função para retornar valores reais no texto. Se o modo 'preciso/exato' estiver ativado, será utilizado REGEX para verificar se o valor real está nos padrões 
 def return_real_values(mode):
@@ -183,7 +233,7 @@ def return_real_values(mode):
             valid_real_value = True
             if mode == "exact":
                 valid_real_value = validate_info(desired_token.text, r"^(([1-9]\d{0,2}(\.\d{3})*)|(([1-9]\.\d*)?\d))(\,\d\d)?$")
-            if valid_real_value and (isnumber(desired_token.text) or desired_token.text.startswith("X")):
+            if valid_real_value and (is_number(desired_token.text) or desired_token.text.startswith("X")):
                 real_values.append(token.text + " " + desired_token.text)
     return real_values
 

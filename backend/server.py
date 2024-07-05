@@ -39,6 +39,7 @@ def show_file_info(text, mode, filepath):
         contractor = return_contractor()
         return jsonify({"message": "Success!", "cnpjs": cnpjs, "real_values": real_values, "cats": cats, "date": date, "contractant": contractant, "contractor": contractor}), 200
     except Exception as e:
+        print(e)
         return jsonify({"error": "Failed to process the file: " + str(e)}), 500
     finally: 
         try:
@@ -55,6 +56,7 @@ def process_document_text():
         mode = data.get('mode') 
         return show_file_info(text, mode)
     except Exception as e:
+        print(e)
         return jsonify({"error": str(e)}), 400
 
 # Rota para upload de arquivos, que são então transformados em texto. Recebe um FormData, que contém o arquivo e o modo. Após transformar o arquivo em texto, invoca a função para mostrar as informações logo em seguida 
@@ -68,6 +70,7 @@ def handle_file_upload():
         filepath = text_and_filepath[1]
         return show_file_info(text, mode, filepath)
     except Exception as e:
+        print(e)
         return jsonify({"error": str(e)}), 400
 
 # Rota de hello world apenas para testar se o server está funcionando
