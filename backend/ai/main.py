@@ -58,7 +58,7 @@ def extract_entity_after_keywords(keywords):
 
 
 def return_contractant():
-    keywords = ["CONTRATANTE", "COMPRADOR", "LOCADOR", "PARCEIRA", "PARCEIRO", "DIVULGANTE", "DIVULGADORA"]
+    keywords = ["CONTRATANTE", "COMPRADOR", "LOCADOR", "PARCEIRA", "PARCEIRO", "DIVULGANTE", "DIVULGADORA", "CREDENCIANTE"]
     contractant = extract_entity_after_keywords(keywords)
     if contractant:
         print("Contractant processed. Contractant: " + contractant)
@@ -67,7 +67,7 @@ def return_contractant():
     return "Nenhum contratante encontrado"
 
 def return_contractor():
-    keywords = ["CONTRATADA", "VENDEDOR", "LOCATÁRIO", "PARCEIRA", "PARCEIRO", "RECEPTOR", "RECEPTORA"]
+    keywords = ["CONTRATADA", "VENDEDOR", "LOCATÁRIO", "PARCEIRA", "PARCEIRO", "RECEPTOR", "RECEPTORA", "CREDENCIADA"]
     contractor = extract_entity_after_keywords(keywords)
     if contractor:
         print("Contractor processed. Contractor: " + contractor)
