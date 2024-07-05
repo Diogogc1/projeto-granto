@@ -27,7 +27,7 @@ export default function Inserir() {
         setFileName(file.name);
 
         try {
-            const response = await fetch('http://localhost:5000/post/upload-file', {
+            const response = await fetch('https://virtualibrary.onrender.com/post/upload-file', {
                 method: "POST",
                 body: formData,
             });
