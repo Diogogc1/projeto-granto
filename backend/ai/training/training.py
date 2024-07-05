@@ -47,8 +47,8 @@ try:
     optimizer = nlp.begin_training()
     print("Starting training...")
 
-    # Realiza o treinamento em 50 iterações
-    for i in range(50):
+    # Realiza o treinamento em 100 iterações, pode demorar um pouco
+    for i in range(100):
         random.shuffle(train_data)  
         for text, annotations in train_data:
             doc = nlp.make_doc(text)  
