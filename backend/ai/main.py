@@ -38,7 +38,7 @@ def extract_entity_after_keywords(keywords):
         if token.text.upper() in keywords:
             count = 1
             entity_text = ""
-            while (count < 20) and (token.i + count < len(doc)): 
+            while (token.i + count < len(doc)) and (count < 20):
                 next_token = doc[token.i + count]
                 if next_token.text in [":", "\n", "-"]:
                     count += 1
@@ -99,11 +99,11 @@ def calculate_relative_dates(text):
         r'validade\s+de\s+(\d+)\s+(meses|dias|anos)\s+iniciando-se\s+em\s+(\d{2}/\d{2}/\d{4})',
         r'execução\s+do\s+contrato\s+por\s+(\d+)\s+(meses|dias|anos),?\s+começando\s+em\s+(\d{2}/\d{2}/\d{4})',
         r'válido\s+por\s+(\d+)\s+(meses|dias|anos)\s+a\s+partir\s+de\s+(\d{2}/\d{2}/\d{4})',
-        r'\d{2}/\d{2}/\d{4}',  # Data no formato dd/mm/yyyy
-        r'\d{2}-\d{2}-\d{4}',  # Data no formato dd-mm-yyyy
-        r'[a-z]+\s+\d{1,2},\s+\d{4}',  # Data no formato inglês: 'July 21, 2024'
-        r'\d{1,2}\s+[a-z]{3}\.\s+\d{4}',  # Data no formato abreviado: '21 jun. 2024'
-        r'[A-Z][a-zéúíóáãõ]+\s+[A-Z][a-zéúíóáãõ]+\s*,\s+\d{1,2}\s+de\s+[a-zéúíóáãõ]+\s+de\s+\d{4}'  # Data no formato 'São Paulo, 21 de junho de 2024'
+        r'\d{2}/\d{2}/\d{4}', 
+        r'\d{2}-\d{2}-\d{4}',  
+        r'[a-z]+\s+\d{1,2},\s+\d{4}',  
+        r'\d{1,2}\s+[a-z]{3}\.\s+\d{4}',  
+        r'[A-Z][a-zéúíóáãõ]+\s+[A-Z][a-zéúíóáãõ]+\s*,\s+\d{1,2}\s+de\s+[a-zéúíóáãõ]+\s+de\s+\d{4}'  
     ]
     
     for pattern in relative_patterns:
@@ -145,7 +145,7 @@ def calculate_relative_dates(text):
                         if month is None:
                             continue
                         
-                        final_date = parse(f"{day}/{month}/{year}")
+                        final_date = parse(f"{month}/{day}/{year}")
                         return final_date.strftime('%d/%m/%Y')
                     
                     except (IndexError, ValueError):
@@ -193,14 +193,15 @@ def return_cnpjs(mode):
     for token in doc:
         if token.text == "CNPJ":
             count = 1
-            while (count < 100) and (doc[token.i + count].text not in [":", "n", "nº", "n.", "n.º", "nº."]):
+            while (token.i + count < len(doc)) and (doc[token.i + count].text not in [":", "n", "nº", "n.", "n.º", "nº."]):
                 count += 1
-            if count < 100:
+            if token.i + count < len(doc):
                 desired_token = doc[token.i + count + 1]
                 if desired_token.is_space or desired_token.is_punct:
-                    desired_token = doc[token.i + count + 2]
+                    if token.i + count + 2 < len(doc):
+                        desired_token = doc[token.i + count + 2]
                 valid_cnpj = True
-                possible_verification_numbers = doc[desired_token.i + 1].text
+                possible_verification_numbers = doc[desired_token.i + 1].text if desired_token.i + 1 < len(doc) else ""
                 if mode == "exact":
                     valid_cnpj = validate_info(desired_token.text + possible_verification_numbers, r"([0-9]{2}[\.]?[0-9]{3}[\.]?[0-9]{3}[\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\.]?[0-9]{3}[\.]?[0-9]{3}[-]?[0-9]{2})")
                 if valid_cnpj and len(desired_token.text) > 10:
@@ -210,7 +211,8 @@ def return_cnpjs(mode):
                     else:
                         if desired_token.text not in cnpjs:
                             cnpjs.append(desired_token.text)
-    return cnpjs 
+    return cnpjs
+
 
 # Checar se é número
 def is_number(text):
@@ -226,16 +228,18 @@ def return_real_values(mode):
     for token in doc:
         if token.text == "R$":
             count = 1
-            desired_token = doc[token.i + count]
-            while (desired_token.is_space or desired_token.is_punct) and count < 100:
+            while (token.i + count < len(doc)) and (doc[token.i + count].is_space or doc[token.i + count].is_punct) and count < 100:
                 count += 1
+            if token.i + count < len(doc):
                 desired_token = doc[token.i + count]
-            valid_real_value = True
-            if mode == "exact":
-                valid_real_value = validate_info(desired_token.text, r"^(([1-9]\d{0,2}(\.\d{3})*)|(([1-9]\.\d*)?\d))(\,\d\d)?$")
-            if valid_real_value and (is_number(desired_token.text) or desired_token.text.startswith("X")):
-                real_values.append(token.text + " " + desired_token.text)
+                valid_real_value = True
+                if mode == "exact":
+                    valid_real_value = validate_info(desired_token.text, r"^(([1-9]\d{0,2}(\.\d{3})*)|(([1-9]\.\d*)?\d))(\,\d\d)?$")
+                if valid_real_value and (is_number(desired_token.text) or desired_token.text.startswith("X")):
+                    if token.text + " " + desired_token.text not in real_values:
+                        real_values.append(token.text + " " + desired_token.text)
     return real_values
+
 
 # Função que retorna as classificações do texto, como um objeto. Ela utiliza o nosso modelo customizado para classificações
 def return_cats(text):
